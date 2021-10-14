@@ -183,7 +183,9 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    // implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0" // 处理react-native-screens
+    implementation "androidx.appcompat:appcompat:1.0.0-rc01" // 处理react-native-screens
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0-alpha02" //处理react-native-screens
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
@@ -216,5 +218,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
-
+// 应用全局变量插件
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
