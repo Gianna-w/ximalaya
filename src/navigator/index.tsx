@@ -40,7 +40,11 @@ class Navigator extends Component {
               }),
             },
           }}>
-          <Stack.Screen name="BottomTabs" component={BottomTabs} />
+          <Stack.Screen
+            name="BottomTabs"
+            component={BottomTabs}
+            options={{title: '首页'}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
