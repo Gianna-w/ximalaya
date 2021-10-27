@@ -5,15 +5,16 @@ import {
   getFocusedRouteNameFromRoute,
 } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from '@/pages/Home';
+import HomeTabs from './HomeTabs';
 import Found from '@/pages/Found';
 import Listen from '@/pages/Listen';
 import Account from '@/pages/Account';
 import {RootStackNavigation, RootStackParamList} from './index';
 import Icon from '@/assets/iconfont/Icon';
+import {mainColor} from '@/config/theme';
 
 export type BottomTabParamList = {
-  Home: undefined;
+  HomeTabs: undefined;
   Found: undefined;
   Listen: undefined;
   Account: undefined;
@@ -41,7 +42,7 @@ class Navigator extends Component<IProps> {
   getHeaderTitle = (route: any) => {
     const routeName = getFocusedRouteNameFromRoute(route);
     switch (routeName) {
-      case 'Home':
+      case 'HomeTabs':
         return '首页';
       case 'Listen':
         return '我听';
@@ -56,10 +57,10 @@ class Navigator extends Component<IProps> {
 
   render() {
     return (
-      <Tab.Navigator tabBarOptions={{activeTintColor: '#f86442'}}>
+      <Tab.Navigator tabBarOptions={{activeTintColor: mainColor}}>
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="HomeTabs"
+          component={HomeTabs}
           options={{
             title: '首页',
             tabBarIcon: ({color, size}) => (

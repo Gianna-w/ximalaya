@@ -1193,6 +1193,13 @@
     query-string "^6.13.6"
     react-is "^16.13.0"
 
+"@react-navigation/material-top-tabs@5.1.6":
+  version "5.1.6"
+  resolved "https://registry.npmmirror.com/@react-navigation/material-top-tabs/download/@react-navigation/material-top-tabs-5.1.6.tgz#b5c7c37b1273371630a191d58a0fbb7ad45a933f"
+  integrity sha1-tcfDexJzNxYwoZHVig+7etRakz8=
+  dependencies:
+    color "^3.1.2"
+
 "@react-navigation/native@5.0.8":
   version "5.0.8"
   resolved "https://registry.npmmirror.com/@react-navigation/native/download/@react-navigation/native-5.0.8.tgz#9ca9c197815930e0eb39b453e3da02cc04b6637e"
@@ -5668,6 +5675,11 @@ react-native-svg@12.0.3:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-tab-view@2.13.0:
+  version "2.13.0"
+  resolved "https://registry.nlark.com/react-native-tab-view/download/react-native-tab-view-2.13.0.tgz#23037aa43b0f8f682ddc20415a4baaaf6f82ae8f"
+  integrity sha1-IwN6pDsPj2gt3CBBWkuqr2+Cro8=
 
 react-native@0.65.1:
   version "0.65.1"

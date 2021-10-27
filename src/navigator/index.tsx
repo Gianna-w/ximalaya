@@ -7,7 +7,7 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
-import {Platform, StyleSheet} from 'react-native';
+import {Platform, StatusBar, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
@@ -30,6 +30,7 @@ class Navigator extends Component {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // 水平切换
             gestureEnabled: true, // 使用手势
             gestureDirection: 'horizontal', // 水平手势
+            headerStatusBarHeight: StatusBar.currentHeight,
             headerStyle: {
               ...Platform.select({
                 android: {
