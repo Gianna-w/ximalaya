@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {View, Text, Button} from 'react-native';
+import {ScrollView, Text, Button} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 import Carousel from './components/Carousel';
+import Guess from './components/Guess';
 
 const mapStateToProps = ({home, loading}: RootState) => ({
   carousels: home.carousels,
@@ -34,11 +35,12 @@ class Home extends Component<IProps> {
   render() {
     const {carousels, loading} = this.props;
     return (
-      <View>
+      <ScrollView>
         <Text>{loading ? '正在加载...' : ''}</Text>
         <Button title="跳转到发现页" onPress={this.toDetail} />
         <Carousel carousels={carousels} />
-      </View>
+        <Guess />
+      </ScrollView>
     );
   }
 }
