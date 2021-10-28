@@ -3,6 +3,7 @@ import {Provider} from 'react-redux';
 import store from '@/config/dva';
 import Navigator from './navigator';
 import {StatusBar} from 'react-native';
+import '@/config/http';
 
 class Entry extends Component {
   render() {
