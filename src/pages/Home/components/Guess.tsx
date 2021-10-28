@@ -87,6 +87,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 6,
+    paddingBottom: 5,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#dedede',
   },
   headerTitle: {
     marginLeft: 6,
