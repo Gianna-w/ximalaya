@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, Button, FlatList, ListRenderItemInfo} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  ListRenderItemInfo,
+  StyleSheet,
+} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
@@ -11,14 +18,19 @@ import ChannelItem from './components/ChannelItem';
 const mapStateToProps = ({home, loading}: RootState) => ({
   carousels: home.carousels,
   channels: home.channels,
-  loading: loading.effects['home/fetchCarousels'],
+  hasMore: home.pagination.hasMore,
+  loading: loading.effects['home/fetchChannels'],
 });
 const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 interface IProps extends ModelState {
   navigation: RootStackNavigation;
 }
-class Home extends Component<IProps> {
+interface IState {
+  refreshing: boolean;
+}
+class Home extends Component<IProps, IState> {
+  state = {refreshing: false};
   componentDidMount() {
     this.fetchCarousels();
     this.fetchChannels();
@@ -48,15 +60,27 @@ class Home extends Component<IProps> {
   };
 
   get header() {
-    const {carousels, loading} = this.props;
+    const {carousels} = this.props;
     return (
       <View>
-        {loading && <Text>'正在加载...'</Text>}
         <Button title="跳转到发现页" onPress={this.toDetail} />
         <Carousel carousels={carousels} />
         <Guess />
       </View>
     );
+  }
+
+  get footer() {
+    const {loading, hasMore, channels} = this.props;
+    if (channels.length === 0) {
+      return <Text style={styles.footer}>暂无数据</Text>;
+    }
+    if (loading) {
+      return <Text style={styles.footer}>正在加载中...</Text>;
+    }
+    if (!hasMore) {
+      return <Text style={styles.footer}>--我是有底线的--</Text>;
+    }
   }
 
   onPressListItem = (data: IChannel) => {
@@ -67,17 +91,53 @@ class Home extends Component<IProps> {
     return item.id;
   };
 
+  // 上拉加载
+  onEndReached = () => {
+    const {hasMore, loading, dispatch} = this.props;
+    if (!hasMore || loading) {
+      return;
+    }
+    dispatch({
+      type: 'home/fetchChannels',
+      payload: {loadMore: true},
+    });
+  };
+
+  // 下拉刷新
+  onRefresh = () => {
+    this.setState({refreshing: true});
+    this.props.dispatch({
+      type: 'home/fetchChannels',
+      callback: () => {
+        this.setState({refreshing: false});
+      },
+    });
+  };
+
   render() {
     const {channels} = this.props;
+    const {refreshing} = this.state;
     return (
       <FlatList
         ListHeaderComponent={this.header}
+        ListFooterComponent={this.footer}
         data={channels}
         renderItem={this.renderItem}
         keyExtractor={this.keyExtractor}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={0.2}
+        onRefresh={this.onRefresh}
+        refreshing={refreshing}
       />
     );
   }
 }
+
+const styles = StyleSheet.create({
+  footer: {
+    textAlign: 'center',
+    paddingVertical: 10,
+  },
+});
 
 export default connector(Home);
