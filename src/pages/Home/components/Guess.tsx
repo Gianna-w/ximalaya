@@ -38,6 +38,10 @@ class Guess extends Component<IProps> {
     );
   };
 
+  keyExtractor = (item: IGuess) => {
+    return item.id;
+  };
+
   render() {
     const {guess} = this.props;
     return (
@@ -52,7 +56,12 @@ class Guess extends Component<IProps> {
             <Icon name="icon-more" />
           </View>
         </View>
-        <FlatList data={guess} renderItem={this.renderItem} numColumns={3} />
+        <FlatList
+          data={guess}
+          renderItem={this.renderItem}
+          numColumns={3}
+          keyExtractor={this.keyExtractor}
+        />
         <Touchable onPress={this.fetchData}>
           <View style={{...styles.flexRow, ...styles.changeGuess}}>
             <Icon name="icon-update_dafalut" color={mainColor} size={14} />

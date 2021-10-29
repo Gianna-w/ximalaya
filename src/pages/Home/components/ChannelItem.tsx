@@ -3,34 +3,46 @@ import {IChannel} from '@/models/home';
 import {View, Text, Image, StyleSheet} from 'react-native';
 import Icon from '@/assets/iconfont/Icon';
 import {mainColor} from '@/config/theme';
+import Touchable from '@/components/Touchable';
 
 interface IProps {
   item: IChannel;
+  onPress: (data: IChannel) => void;
 }
 const ChannelItem: React.FC<IProps> = props => {
   const {item} = props;
+
+  const onPressItem = () => {
+    const {onPress} = props;
+    if (typeof onPress === 'function') {
+      onPress(item);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Image source={{uri: item.image}} style={styles.image} />
-      <View style={styles.rightContainer}>
-        <Text style={styles.title} numberOfLines={1}>
-          {item.title}
-        </Text>
-        <Text style={styles.remark} numberOfLines={2}>
-          {item.remark}
-        </Text>
-        <View style={styles.bottom}>
-          <View style={styles.flexRow}>
-            <Icon name="icon-listen" size={14} color={mainColor} />
-            <Text style={styles.bottomText}>{item.played}</Text>
-          </View>
-          <View style={styles.flexRow}>
-            <Icon name="icon-Sound-wave" size={14} color={mainColor} />
-            <Text style={styles.bottomText}>{item.playing}</Text>
+    <Touchable onPress={onPressItem}>
+      <View style={styles.container}>
+        <Image source={{uri: item.image}} style={styles.image} />
+        <View style={styles.rightContainer}>
+          <Text style={styles.title} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={styles.remark} numberOfLines={2}>
+            {item.remark}
+          </Text>
+          <View style={styles.bottom}>
+            <View style={styles.flexRow}>
+              <Icon name="icon-listen" size={14} color={mainColor} />
+              <Text style={styles.bottomText}>{item.played}</Text>
+            </View>
+            <View style={styles.flexRow}>
+              <Icon name="icon-Sound-wave" size={14} color={mainColor} />
+              <Text style={styles.bottomText}>{item.playing}</Text>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </Touchable>
   );
 };
 
@@ -53,7 +65,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 8,
     marginRight: 10,
-    background: '#dedede',
+    backgroundColor: '#dedede',
   },
   rightContainer: {
     flex: 1,

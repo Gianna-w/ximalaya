@@ -44,7 +44,7 @@ class Home extends Component<IProps> {
   };
 
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem item={item} />;
+    return <ChannelItem item={item} onPress={this.onPressListItem} />;
   };
 
   get header() {
@@ -59,6 +59,14 @@ class Home extends Component<IProps> {
     );
   }
 
+  onPressListItem = (data: IChannel) => {
+    console.log('列表数据', data);
+  };
+
+  keyExtractor = (item: IChannel) => {
+    return item.id;
+  };
+
   render() {
     const {channels} = this.props;
     return (
@@ -66,6 +74,7 @@ class Home extends Component<IProps> {
         ListHeaderComponent={this.header}
         data={channels}
         renderItem={this.renderItem}
+        keyExtractor={this.keyExtractor}
       />
     );
   }
