@@ -7,27 +7,29 @@ import SnapCarousel, {
 import {StyleSheet, View} from 'react-native';
 import {viewportWidth, wp, hp} from '@/utils/util';
 import {ICarousel} from '@/models/home';
+import {RootState} from '@/models/index';
+import {connect, ConnectedProps} from 'react-redux';
 
 const sliderWidth = viewportWidth;
 const itemWidth = wp(90) + wp(2) * 2;
-const itemHeight = hp(26);
-interface IProps {
-  carousels: ICarousel[];
-}
+export const itemHeight = hp(26);
+
+const mapStateToProps = ({home}: RootState) => ({
+  carousels: home.carousels,
+  activeCarouselIndex: home.activeCarouselIndex,
+});
+const connector = connect(mapStateToProps);
+type ModelState = ConnectedProps<typeof connector>;
+interface IProps extends ModelState {}
 
 class Carousel extends Component<IProps> {
-  state = {
-    activeSlide: 0,
-  };
-
   get pagination() {
-    const {activeSlide} = this.state;
-    const {carousels} = this.props;
+    const {carousels, activeCarouselIndex} = this.props;
     return (
       <View style={styles.paginationWrapper}>
         <Pagination
           dotsLength={carousels.length}
-          activeDotIndex={activeSlide}
+          activeDotIndex={activeCarouselIndex}
           containerStyle={styles.paginationContainer}
           dotContainerStyle={styles.dotContainer}
           dotStyle={styles.dotStyle}
@@ -39,7 +41,10 @@ class Carousel extends Component<IProps> {
   }
 
   onSnapToItem = (slideIndex: number) => {
-    this.setState({activeSlide: slideIndex});
+    this.props.dispatch({
+      type: 'home/setState',
+      payload: {activeCarouselIndex: slideIndex},
+    });
   };
 
   renderItem = ({item}: {item: ICarousel}, parallaxData: any) => {
@@ -103,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Carousel;
+export default connector(Carousel);

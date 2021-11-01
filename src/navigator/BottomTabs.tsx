@@ -32,15 +32,31 @@ interface IProps {
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 class Navigator extends Component<IProps> {
+  componentDidMount() {
+    this.setHeaderOptions();
+  }
   componentDidUpdate() {
-    const {navigation, route} = this.props;
-    navigation.setOptions({
-      headerTitle: this.getHeaderTitle(route),
-    });
+    this.setHeaderOptions();
   }
 
-  getHeaderTitle = (route: any) => {
-    const routeName = getFocusedRouteNameFromRoute(route);
+  setHeaderOptions = () => {
+    const {navigation, route} = this.props;
+    const currrentRoute: any = route;
+    const routeName = getFocusedRouteNameFromRoute(currrentRoute) || 'HomeTabs';
+    if (routeName === 'HomeTabs') {
+      navigation.setOptions({
+        headerTransparent: true,
+        headerTitle: '',
+      });
+    } else {
+      navigation.setOptions({
+        headerTransparent: false,
+        headerTitle: this.getHeaderTitle(routeName),
+      });
+    }
+  };
+
+  getHeaderTitle = (routeName: string | undefined) => {
     switch (routeName) {
       case 'HomeTabs':
         return '首页';

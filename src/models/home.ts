@@ -38,6 +38,8 @@ interface HomeState {
   guess: IGuess[];
   channels: IChannel[];
   pagination: IPagination;
+  activeCarouselIndex: number;
+  linearVisible: boolean;
 }
 
 interface HomeModel extends Model {
@@ -58,6 +60,8 @@ const initState = {
   guess: [],
   channels: [],
   pagination: {current: 1, total: 0, hasMore: true},
+  activeCarouselIndex: 0,
+  linearVisible: true,
 };
 
 const homeModel: HomeModel = {
