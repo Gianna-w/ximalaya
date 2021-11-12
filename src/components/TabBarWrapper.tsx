@@ -25,6 +25,12 @@ type ModelState = ConnectedProps<typeof connector>;
 type IProps = MaterialTopTabBarProps & ModelState;
 
 class TabBarWrapper extends Component<IProps> {
+  // 跳转到分类页面
+  goCategory = () => {
+    const {navigation} = this.props;
+    navigation.navigate('Category');
+  };
+
   get linearGradient() {
     const {linearVisible, linearColors} = this.props;
     return (
@@ -50,7 +56,7 @@ class TabBarWrapper extends Component<IProps> {
             })}
             style={styles.tabBar}
           />
-          <Touchable style={styles.categoryBtn}>
+          <Touchable style={styles.categoryBtn} onPress={this.goCategory}>
             <Text>分类</Text>
           </Touchable>
         </View>

@@ -7,12 +7,14 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import BottomTabs from './BottomTabs';
+import Category from '@/pages/Category/Index';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
+  Category: undefined;
   Found: {id: string};
 };
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
@@ -31,6 +33,8 @@ class Navigator extends Component {
             gestureEnabled: true, // 使用手势
             gestureDirection: 'horizontal', // 水平手势
             headerStatusBarHeight: StatusBar.currentHeight,
+            headerBackTitleVisible: false, // 隐藏返回标题
+            headerTintColor: '#333',
             headerStyle: {
               ...Platform.select({
                 android: {
@@ -45,6 +49,11 @@ class Navigator extends Component {
             name="BottomTabs"
             component={BottomTabs}
             options={{title: '首页'}}
+          />
+          <Stack.Screen
+            name="Category"
+            component={Category}
+            options={{title: '分类'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
