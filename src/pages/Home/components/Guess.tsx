@@ -15,6 +15,7 @@ type ModalState = ConnectedProps<typeof connector>;
 
 interface IProps extends ModalState {
   guess: IGuess[];
+  namespace: string;
 }
 
 class Guess extends Component<IProps> {
@@ -23,9 +24,9 @@ class Guess extends Component<IProps> {
   }
 
   fetchData = () => {
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchGuess',
+      type: `${namespace}/fetchGuess`,
     });
   };
 

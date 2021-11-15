@@ -23,6 +23,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "dva-core-ts": "2.0.7",
     "dva-loading-ts": "3.0.23",
+    "dva-model-extend": "0.1.2",
     "fbjs": "^3.0.0",
     "lodash": "^4.17.21",
     "react": "17.0.2",

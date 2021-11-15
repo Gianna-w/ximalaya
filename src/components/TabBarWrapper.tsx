@@ -11,15 +11,20 @@ import Touchable from './Touchable';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '../models';
 import {mainColor} from '@/config/theme';
+import {getActiveRouteName} from '@/utils/util';
 
 const statusBarHeight = getStatusBarHeight();
 
-const mapStateToProps = ({home}: RootState) => ({
-  linearColors: home.carousels?.length
-    ? home.carousels[home.activeCarouselIndex].colors
-    : ['#e6e6e6', '#efefef', '#f2f2f2'],
-  linearVisible: home.linearVisible,
-});
+const mapStateToProps = (state: RootState, props: MaterialTopTabBarProps) => {
+  const routeName = getActiveRouteName(props.state);
+  const modelState = state[routeName];
+  return {
+    linearColors: modelState.carousels?.length
+      ? modelState.carousels[modelState.activeCarouselIndex].colors
+      : ['#e6e6e6', '#efefef', '#f2f2f2'],
+    linearVisible: modelState.linearVisible,
+  };
+};
 const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 type IProps = MaterialTopTabBarProps & ModelState;

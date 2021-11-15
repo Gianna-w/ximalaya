@@ -16,13 +16,24 @@ import Carousel, {itemHeight} from './components/Carousel';
 import Guess from './components/Guess';
 import {IChannel} from '@/models/home';
 import ChannelItem from './components/ChannelItem';
+import {RouteProp} from '@react-navigation/core';
+import {HomeParamsList} from '@/navigator/HomeTabs';
 
-const mapStateToProps = ({home, loading}: RootState) => ({
-  channels: home.channels,
-  hasMore: home.pagination.hasMore,
-  loading: loading.effects['home/fetchChannels'],
-  linearVisible: home.linearVisible,
-});
+const mapStateToProps = (
+  state: RootState,
+  {route}: {route: RouteProp<HomeParamsList, string>},
+) => {
+  const {namespace} = route.params;
+  const modelState = state[namespace];
+  return {
+    namespace,
+    modelState,
+    channels: modelState.channels,
+    hasMore: modelState.pagination.hasMore,
+    loading: state.loading.effects[`${namespace}/fetchChannels`],
+    linearVisible: modelState.linearVisible,
+  };
+};
 const connector = connect(mapStateToProps);
 type ModelState = ConnectedProps<typeof connector>;
 interface IProps extends ModelState {
@@ -39,16 +50,16 @@ class Home extends Component<IProps, IState> {
   }
 
   fetchCarousels = () => {
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchCarousels',
+      type: `${namespace}/fetchCarousels`,
     });
   };
 
   fetchChannels = () => {
-    const {dispatch} = this.props;
+    const {dispatch, namespace} = this.props;
     dispatch({
-      type: 'home/fetchChannels',
+      type: `${namespace}/fetchChannels`,
     });
   };
 
@@ -62,12 +73,13 @@ class Home extends Component<IProps, IState> {
   };
 
   get header() {
+    const {namespace} = this.props;
     return (
       <View>
         <Button title="跳转到发现页" onPress={this.toDetail} />
         <Carousel />
         <View style={styles.whiteBg}>
-          <Guess />
+          <Guess namespace={namespace} />
         </View>
       </View>
     );
@@ -96,12 +108,12 @@ class Home extends Component<IProps, IState> {
 
   // 上拉加载
   onEndReached = () => {
-    const {hasMore, loading, dispatch} = this.props;
+    const {hasMore, loading, dispatch, namespace} = this.props;
     if (!hasMore || loading) {
       return;
     }
     dispatch({
-      type: 'home/fetchChannels',
+      type: `${namespace}/fetchChannels`,
       payload: {loadMore: true},
     });
   };
@@ -109,8 +121,9 @@ class Home extends Component<IProps, IState> {
   // 下拉刷新
   onRefresh = () => {
     this.setState({refreshing: true});
-    this.props.dispatch({
-      type: 'home/fetchChannels',
+    const {dispatch, namespace} = this.props;
+    dispatch({
+      type: `${namespace}/fetchChannels`,
       callback: () => {
         this.setState({refreshing: false});
       },
@@ -120,10 +133,10 @@ class Home extends Component<IProps, IState> {
   // 滚动
   onScroll = ({nativeEvent}: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newLinearVisible = nativeEvent.contentOffset.y < itemHeight;
-    const {linearVisible, dispatch} = this.props;
+    const {linearVisible, dispatch, namespace} = this.props;
     if (linearVisible !== newLinearVisible) {
       dispatch({
-        type: 'home/setState',
+        type: `${namespace}/setState`,
         payload: {
           linearVisible: newLinearVisible,
         },
