@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, RouteProp} from '@react-navigation/native';
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -9,17 +9,38 @@ import {
 import BottomTabs from './BottomTabs';
 import Category from '@/pages/Category/Index';
 import {Platform, StatusBar, StyleSheet} from 'react-native';
+import Album from '@/pages/Album/Index';
 
 export type RootStackParamList = {
   BottomTabs: {
     screen?: string;
   };
   Category: undefined;
-  Found: {id: string};
+  Album: {
+    item: {
+      id: string;
+      title: string;
+      image: string;
+    };
+  };
 };
 export type RootStackNavigation = StackNavigationProp<RootStackParamList>;
 
 const Stack = createStackNavigator<RootStackParamList>();
+
+const getAlbumOptions = ({
+  route,
+}: {
+  route: RouteProp<RootStackParamList, 'Album'>;
+}) => {
+  return {
+    headerTitle: route.params.item.title,
+    headerTransparent: true,
+    headerTitleStyle: {
+      opacity: 0,
+    },
+  };
+};
 class Navigator extends Component {
   render() {
     return (
@@ -54,6 +75,11 @@ class Navigator extends Component {
             name="Category"
             component={Category}
             options={{title: '分类'}}
+          />
+          <Stack.Screen
+            name="Album"
+            component={Album}
+            options={getAlbumOptions}
           />
         </Stack.Navigator>
       </NavigationContainer>

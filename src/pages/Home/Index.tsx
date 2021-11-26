@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Button,
   FlatList,
   ListRenderItemInfo,
   StyleSheet,
@@ -14,7 +13,7 @@ import {RootStackNavigation} from '@/navigator/index';
 import {RootState} from '@/models/index';
 import Carousel, {itemHeight} from './components/Carousel';
 import Guess from './components/Guess';
-import {IChannel} from '@/models/home';
+import {IChannel, IGuess} from '@/models/home';
 import ChannelItem from './components/ChannelItem';
 import {RouteProp} from '@react-navigation/core';
 import {HomeParamsList} from '@/navigator/HomeTabs';
@@ -63,23 +62,17 @@ class Home extends Component<IProps, IState> {
     });
   };
 
-  toDetail = () => {
-    const {navigation} = this.props;
-    navigation.navigate('Found', {id: '1111'});
-  };
-
   renderItem = ({item}: ListRenderItemInfo<IChannel>) => {
-    return <ChannelItem item={item} onPress={this.onPressListItem} />;
+    return <ChannelItem item={item} onPress={this.goAlbum} />;
   };
 
   get header() {
     const {namespace} = this.props;
     return (
       <View>
-        <Button title="跳转到发现页" onPress={this.toDetail} />
         <Carousel />
         <View style={styles.whiteBg}>
-          <Guess namespace={namespace} />
+          <Guess namespace={namespace} goAlbum={this.goAlbum} />
         </View>
       </View>
     );
@@ -98,8 +91,9 @@ class Home extends Component<IProps, IState> {
     }
   }
 
-  onPressListItem = (data: IChannel) => {
-    console.log('列表数据', data);
+  goAlbum = (data: IChannel | IGuess) => {
+    const {navigation} = this.props;
+    navigation.navigate('Album', {item: data});
   };
 
   keyExtractor = (item: IChannel) => {

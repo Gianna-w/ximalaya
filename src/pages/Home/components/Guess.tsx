@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, FlatList, StyleSheet, Alert} from 'react-native';
+import {View, Text, Image, FlatList, StyleSheet} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '@/models/index';
 import {IGuess} from '@/models/home';
@@ -16,6 +16,7 @@ type ModalState = ConnectedProps<typeof connector>;
 interface IProps extends ModalState {
   guess: IGuess[];
   namespace: string;
+  goAlbum: (item: IGuess) => void;
 }
 
 class Guess extends Component<IProps> {
@@ -31,8 +32,9 @@ class Guess extends Component<IProps> {
   };
 
   renderItem = ({item}: {item: IGuess}) => {
+    const {goAlbum} = this.props;
     return (
-      <Touchable style={styles.item} onPress={() => Alert.alert('猜你喜欢')}>
+      <Touchable style={styles.item} onPress={() => goAlbum(item)}>
         <Image source={{uri: item.image}} style={styles.image} />
         <Text numberOfLines={2}>{item.title}</Text>
       </Touchable>
